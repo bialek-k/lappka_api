@@ -1,14 +1,12 @@
-const Shelter = require("../models/shelter");
+const ShelterStats = require("../models/shelter");
 
 exports.getShelterStats = async (req, res, next) => {
 	try {
-		const shelterData = await Shelter.findById(
-			"6516a522da5ef05ba03f29ba"
-		)
+		const existingShelter = await ShelterStats.findOne({_id:"651aef753d3be40afc76593c"}).exec();
+    return res.status(200).send(existingShelter);
 
-		console.log(shelterData);
-		res.status(200);
-	} catch (err) {
-		console.log(err);
+	} catch (err){
+		console.log(err)
 	}
+
 };
