@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const mongoose = require("mongoose");
 
 const authRoutes = require('./routes/auth')
+const shelterRoutes = require('./routes/shelterRoutes')
 
 app.use(bodyParser.json());
 app.use(
@@ -15,6 +16,7 @@ app.use(
   }),
 );
 app.use(authRoutes)
+// app.use(shelterRoutes)
 
 mongoose
 	.connect(
