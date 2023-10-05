@@ -8,7 +8,6 @@ const bodyParser = require('body-parser')
 const mongoose = require("mongoose");
 
 const authRoutes = require('./routes/auth')
-const shelterRoutes = require('./routes/shelterRoutes')
 const petRoutes = require('./routes/pet')
 
 app.use(cors())
@@ -19,9 +18,11 @@ app.use(
 		extended: true,
   }),
 	);
-	app.use(shelterRoutes)
-	app.use(authRoutes)
-	app.use(petRoutes)
+	
+app.use(authRoutes)
+
+
+app.use(petRoutes)
 
 mongoose
 	.connect(

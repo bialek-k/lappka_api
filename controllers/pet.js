@@ -1,4 +1,6 @@
 const Pet = require("../models/pet");
+const Shelter = require ('../models/shelter');
+
 
 exports.pet = async (req, res, next) => {
 	try {
@@ -9,3 +11,22 @@ exports.pet = async (req, res, next) => {
 		console.log(err)
 	}
 };
+
+exports.createPet = async (req,res,next) => {
+	
+	try {
+
+		const userToken = req.userToken;
+		console.log(userToken);
+
+ 		Pet.create({
+		name:req.body.name,
+		species:req.body.species,
+		// shelterId: req.Shelter._id
+	})
+
+	return res.status(200).send("Added pet")
+	} catch(err) {
+		console.log(err);
+	}
+}

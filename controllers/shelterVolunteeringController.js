@@ -1,4 +1,4 @@
-const ShelterStats = require("../models/shelter");
+const shelterVolunteering = require("../models/shelterVolunteering");
 
 exports.getShelterStats = async (req, res, next) => {
 	try {

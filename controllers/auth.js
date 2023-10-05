@@ -5,9 +5,9 @@ const jwt = require('njwt')
 exports.login = async (req, res, next) => {
 
 	try {
-		const { emailaddress, password } = req.body;
-		const existingUser = await User.findOne({emailaddress:emailaddress}).exec();
-
+		const { email, password } = req.body;
+		const existingUser = await User.findOne({email:email}).exec();
+	
 		if(!existingUser){
 			return res.status(400).send("User doesn't exist");
 		} 
@@ -22,7 +22,6 @@ exports.login = async (req, res, next) => {
   	const token = jwt.create(claims, process.env.NODE_JWT_KEY);
   	token.setExpiration(new Date().getTime() + 60*6000);
 		const accessToken = token.compact();
-		console.log(accessToken);
 
     return res.status(200).send(accessToken);
 
