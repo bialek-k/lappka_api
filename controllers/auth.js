@@ -18,7 +18,7 @@ exports.login = async (req, res, next) => {
     }
 
 		// Generate AccessToken
-		const claims = {iss: 'lappka-api', sub:"api-is-dead-make-it-yourself"};
+		const claims = {iss: 'lappka-api', sub:existingUser._id};
   	const token = jwt.create(claims, process.env.NODE_JWT_KEY);
   	token.setExpiration(new Date().getTime() + 60*6000);
 		const accessToken = token.compact();
@@ -28,6 +28,5 @@ exports.login = async (req, res, next) => {
 	} catch (err){
 		return res(400).send('Internal Server Error')
 	}
-
 
 };

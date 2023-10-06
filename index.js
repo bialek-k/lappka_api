@@ -11,7 +11,6 @@ const authRoutes = require('./routes/auth')
 const petRoutes = require('./routes/pet')
 
 app.use(cors())
-
 app.use(bodyParser.json());
 app.use(
 	bodyParser.urlencoded({
@@ -20,8 +19,6 @@ app.use(
 	);
 	
 app.use(authRoutes)
-
-
 app.use(petRoutes)
 
 mongoose

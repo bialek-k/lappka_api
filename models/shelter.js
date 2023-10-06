@@ -18,6 +18,28 @@ const shelterData = new Schema({
 });
 
 
+const shelter = new Schema({
+	shelter:{
+	organizationName: String,
+	longitude: Number,
+	latitude: Number,
+	city: String,
+	street: String,
+	zipCode:String,
+	krs:String,
+	phoneNumber:String,
+	},
+	user:{
+		type: Schema.Types.ObjectId,
+    ref:'User'
+	},
+	pets:{
+		type: Schema.Types.ObjectId,
+    ref:'Pet'
+	}
+})
+
+
 
 
 module.exports = mongoose.model("Shelter", shelterData);

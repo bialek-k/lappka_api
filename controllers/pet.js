@@ -1,5 +1,5 @@
 const Pet = require("../models/pet");
-const Shelter = require ('../models/shelter');
+const User = require ('../models/user');
 
 
 exports.pet = async (req, res, next) => {
@@ -8,25 +8,28 @@ exports.pet = async (req, res, next) => {
     return res.status(200).send(existingPet._id);
 
 	} catch (err){
-		console.log(err)
+		return res.status(400).send("Something went wrong")
 	}
 };
 
 exports.createPet = async (req,res,next) => {
-	
-	try {
 
-		const userToken = req.userToken;
-		console.log(userToken);
+try {
+	const {name, species} = req.body;
 
- 		Pet.create({
-		name:req.body.name,
-		species:req.body.species,
-		// shelterId: req.Shelter._id
-	})
+	const userId = req.user.body.sub
+	const existUser = await User.findById(userId).exec();
+
+	const newPet = {
+		name:name,
+		species:species,
+		shelterId: existUser.shelterId
+	}
+	Pet.create(newPet);
 
 	return res.status(200).send("Added pet")
-	} catch(err) {
-		console.log(err);
+	
+} catch(err) {
+	return res.status(400).send("Something went wrong")
 	}
 }
