@@ -1,22 +1,25 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require('cors')
 const app = express();
 const bodyParser = require('body-parser')
 
 const mongoose = require("mongoose");
 
 const authRoutes = require('./routes/auth')
-const shelterRoutes = require('./routes/shelterRoutes')
+const petRoutes = require('./routes/pet')
 
+app.use(cors())
 app.use(bodyParser.json());
 app.use(
-  bodyParser.urlencoded({
-    extended: true,
+	bodyParser.urlencoded({
+		extended: true,
   }),
-);
+	);
+	
 app.use(authRoutes)
-// app.use(shelterRoutes)
+app.use(petRoutes)
 
 mongoose
 	.connect(
