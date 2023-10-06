@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require('bcryptjs');
-const jwt = require('njwt')
+const jwt = require('jsonwebtoken');
 
 exports.login = async (req, res, next) => {
 
@@ -17,16 +17,13 @@ exports.login = async (req, res, next) => {
       return res.status(400).send('Wrong password');
     }
 
-		// Generate AccessToken
-		const claims = {iss: 'lappka-api', sub:existingUser._id};
-  	const token = jwt.create(claims, process.env.NODE_JWT_KEY);
-  	token.setExpiration(new Date().getTime() + 60*6000);
-		const accessToken = token.compact();
+		const accessToken = jwt.sign({id:existingUser._id}, process.env.NODE_JWT_ACCESSTOKEN_KEY, {expiresIn:86400}); 
+		const refreshToken = jwt.sign({id:existingUser._id}, process.env.NODE_JWT_REFRESHTOKEN_KEY, {expiresIn:56200}); 
 
-    return res.status(200).send(accessToken);
+    return res.status(200).send({accessToken, refreshToken});
 
 	} catch (err){
-		return res(400).send('Internal Server Error')
+		return res.status(400).send('Internal Server Error')
 	}
 
 };
