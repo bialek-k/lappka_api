@@ -8,7 +8,7 @@ const authenticate = async (req, res, next) => {
       return res.status(401).json({ message: 'No JWT' });
     }
     
-    jwt.verify(token, process.env.NODE_JWT_KEY, (err, user) => {
+    jwt.verify(token, process.env.NODE_JWT_ACCESSTOKEN_KEY, (err, user) => {
       if(err) return res.status(403).json({ message: 'Wrong JWT' });
 
       req.user = user;

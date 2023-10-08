@@ -17,7 +17,7 @@ exports.createPet = async (req,res,next) => {
 try {
 	const {name, species} = req.body;
 
-	const userId = req.user.body.sub
+	const userId = req.user.body.id
 	const existUser = await User.findById(userId).exec();
 
 	const newPet = {
