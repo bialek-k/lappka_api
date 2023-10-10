@@ -9,7 +9,7 @@ const options = {
 const uploadImage = async (image) => {
   try {
     const upload = await cloudinary.uploader.upload(image, options);
-    return upload;
+    return upload.secure_url
   } catch (error) {
     return `${error.message}` 
   }
