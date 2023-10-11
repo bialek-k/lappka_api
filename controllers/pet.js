@@ -14,20 +14,24 @@ exports.pet = async (req, res, next) => {
 
 exports.createPet = async (req,res,next) => {
 
-try {
-	const {name, species} = req.body;
+	try {
+const images = req.files;
+const petData = req.body;
+	console.log(images, petData);
+	return res.status(200).send('coś mam')
+	// const {name, species} = req.body;
 
-	const userId = req.user.body.id
-	const existUser = await User.findById(userId).exec();
+	// const userId = req.user.body.id
+	// const existUser = await User.findById(userId).exec();
 
-	const newPet = {
-		name:name,
-		species:species,
-		shelterId: existUser.shelterId
-	}
-	Pet.create(newPet);
+	// const newPet = {
+	// 	name:name,
+	// 	species:species,
+	// 	shelterId: existUser.shelterId
+	// }
+	// // Pet.create(newPet);
 
-	return res.status(200).send("Added pet")
+	// return res.status(200).send("Added pet")
 	
 } catch(err) {
 	return res.status(400).send("Something went wrong")
