@@ -1,15 +1,11 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
+
 const Schema = mongoose.Schema;
-
-/*
-species - rasa
-animalCategory - gatunek
-marking - umaszczenie
-
-*/
 
 const petSchema = new Schema({
   petId: String,
+  added:String,
   name: String,
   description: String,
   species: String,
@@ -29,5 +25,7 @@ const petSchema = new Schema({
     ref:'Shelter'
   },
 });
+
+petSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Pet', petSchema)
