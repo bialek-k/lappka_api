@@ -7,7 +7,7 @@ const upload = multer();
 
 const authenticate = require('../utils/authenticate');
 
-router.get('/pet', petController.pet)
+router.get('/shelter/pet/', petController.pet)
 router.get('/shelter/paginatedPetList', petController.paginatedPetList )
 router.post('/shelters/cards/createpet', authenticate, upload.array('image'), petController.createPet);
 

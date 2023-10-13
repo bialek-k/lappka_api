@@ -20,6 +20,7 @@ const petSchema = new Schema({
     id: String,
     url: String,
   }],
+  views:Number,
   shelterId: {
     type: Schema.Types.ObjectId,
     ref:'Shelter'

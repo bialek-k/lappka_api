@@ -4,14 +4,32 @@ const User = require("../models/user");
 const { uploadImageWithStream } = require("../utils/streamUpload");
 
 exports.pet = async (req, res, next) => {
+	
 	try {
+		const petId = req.query.petId;
+
 		const existingPet = await Pet.findOne({
-			_id: "651aed083d3be40afc765939",
+			_id: petId,
 		}).exec();
-		return res.status(200).send(existingPet._id);
-	} catch (err) {
-		return res.status(400).send("Something went wrong");
+		
+		if(!existingPet){
+			return res.status(404).send("Nie ma takiego zwierzaka");
+		}
+
+		const actualViews = existingPet.views;
+		const increasedViews = actualViews + 1;
+
+		await Pet.updateOne({_id: petId}, { views: existingPet.views + 1});
+
+		return res.status(200).send(existingPet)
+	} catch (error) {
+		console.log(error);
 	}
+	// try {
+	// 	return res.status(200).send(existingPet._id);
+	// } catch (err) {
+	// 	return res.status(400).send("Something went wrong");
+	// }
 };
 
 exports.createPet = async (req, res, next) => {
@@ -89,6 +107,7 @@ exports.paginatedPetList = async (req, res, next) => {
 						weight: pet.weight,
 						isSterilized: pet.isSterilized,
 						isVisible: pet.isVisible,
+						views: pet.views,
 						images: pet.images.map((img) => {
 							return { id: img.id, url: img.url };
 						}),
