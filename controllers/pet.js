@@ -1,5 +1,6 @@
 const Pet = require("../models/pet");
 const User = require("../models/user");
+const ShelterStats = require("../models/shelterStats");
 
 const { uploadImageWithStream } = require("../utils/streamUpload");
 
@@ -7,7 +8,6 @@ exports.pet = async (req, res, next) => {
 	
 	try {
 		const petId = req.query.petId;
-
 		const existingPet = await Pet.findOne({
 			_id: petId,
 		}).exec();
@@ -16,20 +16,12 @@ exports.pet = async (req, res, next) => {
 			return res.status(404).send("Nie ma takiego zwierzaka");
 		}
 
-		const actualViews = existingPet.views;
-		const increasedViews = actualViews + 1;
-
 		await Pet.updateOne({_id: petId}, { views: existingPet.views + 1});
 
 		return res.status(200).send(existingPet)
 	} catch (error) {
 		console.log(error);
 	}
-	// try {
-	// 	return res.status(200).send(existingPet._id);
-	// } catch (err) {
-	// 	return res.status(400).send("Something went wrong");
-	// }
 };
 
 exports.createPet = async (req, res, next) => {
@@ -60,8 +52,13 @@ exports.createPet = async (req, res, next) => {
 			isVisible: petData.isVisible,
 			images: petImages,
 			shelterId: existUser.shelterId,
+			views: 0,
 		};
 		Pet.create(newPet);
+
+		// Update Shleter Stats
+		await ShelterStats.findOneAndUpdate({shelterId: existUser.shelterId}, {$inc: {cardCount: 1} })
+
 
 		return res.status(200).send("Zwierzak został dodany");
 	} catch (err) {
