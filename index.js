@@ -14,6 +14,7 @@ const mongoose = require("mongoose");
 const authRoutes = require('./routes/auth')
 const petRoutes = require('./routes/pet')
 const storageRoutes = require('./routes/storage')
+const shelterRoutes = require('./routes/shelterRoutes');
 
 app.use(cors())
 app.use(bodyParser.json());
@@ -26,6 +27,7 @@ app.use(
 app.use(authRoutes)
 app.use(petRoutes)
 app.use(storageRoutes)
+app.use(shelterRoutes)
 
 cloudinary.config(cloudinaryConfig.config);
 
