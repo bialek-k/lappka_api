@@ -59,7 +59,7 @@ exports.createPet = async (req, res, next) => {
 		// Update Shleter Stats
 		await ShelterStats.findOneAndUpdate(
 			{ shelterId: existUser.shelterId },
-			{ $inc: { cardCount: 1 } }
+			{ $inc: { cardCount: 1, toAdoptCount: 1 } }
 		);
 
 		return res.status(200).send("Zwierzak został dodany");
@@ -131,7 +131,14 @@ exports.paginatedPetList = async (req, res, next) => {
 
 exports.updatePet = async (req, res) => {
 	try {
-	} catch (error) {}
+		const updatePetData = req.body;
+		const petId = req.body._id;
+
+		const updatePet = await Pet.findOneAndUpdate({_id: petId}, updatePetData, { new: true }).exec();
+		return res.status(200).send(updatePet)
+	} catch (error) {
+		console.log(error)
+	}	
 };
 
 exports.deletePet = async (req, res) => {
@@ -149,13 +156,13 @@ exports.deletePet = async (req, res) => {
 		}
 		await cloudinary.api.delete_resources(images);
 
-		await Pet.findOneAndDelete({ _id: petId });
-
 		// Update Shleter Stats
 		await ShelterStats.findOneAndUpdate(
-			{ shelterId: existUser.shelterId },
-			{ $inc: { cardCount: -1 } }
+			{ shelterId: petToDelete.shelterId },
+			{ $inc: { cardCount: -1, toAdoptCount: -1 } }
 		);
+
+		await Pet.findOneAndDelete({ _id: petId });
 
 		return res
 			.status(200)
