@@ -24,7 +24,7 @@ const uploadImageWithStream = async (files) => {
     const resultStream = await streamUpload(files);
     const resultData = resultStream.map((item) => {
       return {
-        id: item.asset_id,
+        id: item.public_id,
         url: item.secure_url,
       };
     });

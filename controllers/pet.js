@@ -1,24 +1,24 @@
 const Pet = require("../models/pet");
 const User = require("../models/user");
 const ShelterStats = require("../models/shelterStats");
+const cloudinary = require("cloudinary").v2;
 
 const { uploadImageWithStream } = require("../utils/streamUpload");
 
-exports.pet = async (req, res, next) => {
-	
+exports.getPet = async (req, res, next) => {
 	try {
 		const petId = req.query.petId;
 		const existingPet = await Pet.findOne({
 			_id: petId,
 		}).exec();
-		
-		if(!existingPet){
+
+		if (!existingPet) {
 			return res.status(404).send("Nie ma takiego zwierzaka");
 		}
 
-		await Pet.updateOne({_id: petId}, { views: existingPet.views + 1});
+		await Pet.updateOne({ _id: petId }, { views: existingPet.views + 1 });
 
-		return res.status(200).send(existingPet)
+		return res.status(200).send(existingPet);
 	} catch (error) {
 		console.log(error);
 	}
@@ -37,7 +37,7 @@ exports.createPet = async (req, res, next) => {
 			return;
 		}
 
-		const currentDate = new Date().toISOString().slice(0,10)
+		const currentDate = new Date().toISOString().slice(0, 10);
 		const newPet = {
 			added: currentDate,
 			name: petData.name,
@@ -57,8 +57,10 @@ exports.createPet = async (req, res, next) => {
 		Pet.create(newPet);
 
 		// Update Shleter Stats
-		await ShelterStats.findOneAndUpdate({shelterId: existUser.shelterId}, {$inc: {cardCount: 1} })
-
+		await ShelterStats.findOneAndUpdate(
+			{ shelterId: existUser.shelterId },
+			{ $inc: { cardCount: 1 } }
+		);
 
 		return res.status(200).send("Zwierzak został dodany");
 	} catch (err) {
@@ -122,6 +124,42 @@ exports.paginatedPetList = async (req, res, next) => {
 				return res.status(200).send(petListData);
 			}
 		);
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+exports.updatePet = async (req, res) => {
+	try {
+	} catch (error) {}
+};
+
+exports.deletePet = async (req, res) => {
+	try {
+		const petId = req.query.petId;
+
+		const petToDelete = await Pet.findById(petId).exec();
+		if (!petToDelete) {
+			return res.status(404).send("No pet");
+		}
+
+		const images = petToDelete.images.map((img) => img.id);
+		if (!images) {
+			return res.status(404).send("There is no images");
+		}
+		await cloudinary.api.delete_resources(images);
+
+		await Pet.findOneAndDelete({ _id: petId });
+
+		// Update Shleter Stats
+		await ShelterStats.findOneAndUpdate(
+			{ shelterId: existUser.shelterId },
+			{ $inc: { cardCount: -1 } }
+		);
+
+		return res
+			.status(200)
+			.send(`${petToDelete.name} has been removed from database`);
 	} catch (error) {
 		console.log(error);
 	}
