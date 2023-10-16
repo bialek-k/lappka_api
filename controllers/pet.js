@@ -14,10 +14,10 @@ exports.getPet = async (req, res, next) => {
 
 		if (!existingPet) {
 			return res.status(404).send("Nie ma takiego zwierzaka");
+
 		}
 
 		await Pet.updateOne({ _id: petId }, { views: existingPet.views + 1 });
-		console.log(existingPet);
 
 		return res.status(200).send(existingPet);
 	} catch (error) {
@@ -138,6 +138,14 @@ exports.updatePet = async (req, res) => {
 		const petId = req.body._id;
 
 		const updatePet = await Pet.findOneAndUpdate({_id: petId}, updatePetData, { new: true }).exec();
+
+		const adoptedCountValue = await Pet.count({adopted: true }).exec();
+
+		await ShelterStats.findOneAndUpdate(
+			{ shelterId: updatePet.shelterId }, {adoptedCount: adoptedCountValue} 
+		);
+
+		 
 		return res.status(200).send(updatePet)
 	} catch (error) {
 		console.log(error)
