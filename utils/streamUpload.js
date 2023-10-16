@@ -22,15 +22,15 @@ const uploadImageWithStream = async (files) => {
     };
     
     const resultStream = await streamUpload(files);
-    const resultData = resultStream.map((item) => {
-      return {
-        id: item.public_id,
-        url: item.secure_url,
-      };
-    });
-
     
-    return resultData;
+    const petImages = resultStream.map((img) => {
+      return {
+        id: img.public_id,
+        url:img.secure_url
+      }
+    })
+    return petImages
+
   } catch (error) {
     console.log(error);
   }

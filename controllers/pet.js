@@ -17,6 +17,7 @@ exports.getPet = async (req, res, next) => {
 		}
 
 		await Pet.updateOne({ _id: petId }, { views: existingPet.views + 1 });
+		console.log(existingPet);
 
 		return res.status(200).send(existingPet);
 	} catch (error) {
@@ -53,6 +54,7 @@ exports.createPet = async (req, res, next) => {
 			images: petImages,
 			shelterId: existUser.shelterId,
 			views: 0,
+			adopted: false,
 		};
 		Pet.create(newPet);
 
@@ -107,6 +109,7 @@ exports.paginatedPetList = async (req, res, next) => {
 						isSterilized: pet.isSterilized,
 						isVisible: pet.isVisible,
 						views: pet.views,
+						adopted: pet.adopted,
 						images: pet.images.map((img) => {
 							return { id: img.id, url: img.url };
 						}),
@@ -159,7 +162,7 @@ exports.deletePet = async (req, res) => {
 		// Update Shleter Stats
 		await ShelterStats.findOneAndUpdate(
 			{ shelterId: petToDelete.shelterId },
-			{ $inc: { cardCount: -1, toAdoptCount: -1 } }
+			{ $inc: { cardCount: -1, toAdoptCount: -1, adopted: -1 } }
 		);
 
 		await Pet.findOneAndDelete({ _id: petId });

@@ -16,6 +16,7 @@ const petSchema = new Schema({
   weight: Number,
   isSterilized:Boolean,
   isVisible:Boolean,
+  adopted:Boolean,
   images:[{
     id: String,
     url: String,
