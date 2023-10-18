@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const { ObjectId } = require('mongodb');
+
 const mongoosePaginate = require('mongoose-paginate');
 
 const Schema = mongoose.Schema;
@@ -18,8 +20,8 @@ const petSchema = new Schema({
   isVisible:Boolean,
   adopted:Boolean,
   images:[{
-    id: String,
     url: String,
+    _id: ObjectId,
   }],
   views:Number,
   shelterId: {
