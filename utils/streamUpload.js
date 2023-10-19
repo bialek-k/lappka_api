@@ -25,7 +25,7 @@ const uploadImageWithStream = async (files) => {
     
     const petImages = resultStream.map((img) => {
       return {
-        id: img.public_id,
+        storageId: img.public_id,
         url:img.secure_url
       }
     })

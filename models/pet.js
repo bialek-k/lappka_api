@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
-const { ObjectId } = require('mongodb');
+// const { ObjectId } = require('mongodb');
 
 const mongoosePaginate = require('mongoose-paginate');
 
 const Schema = mongoose.Schema;
 
 const petSchema = new Schema({
-  petId: String,
   added:String,
   name: String,
   description: String,
@@ -21,7 +20,7 @@ const petSchema = new Schema({
   adopted:Boolean,
   images:[{
     url: String,
-    _id: ObjectId,
+    storageId: String,
   }],
   views:Number,
   shelterId: {
@@ -31,5 +30,7 @@ const petSchema = new Schema({
 });
 
 petSchema.plugin(mongoosePaginate);
+
+// remove petId:String 
 
 module.exports = mongoose.model('Pet', petSchema)

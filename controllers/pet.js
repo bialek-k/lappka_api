@@ -39,6 +39,7 @@ exports.createPet = async (req, res, next) => {
 		}
 
 		const currentDate = new Date().toISOString().slice(0, 10);
+
 		const newPet = {
 			added: currentDate,
 			name: petData.name,
@@ -166,6 +167,12 @@ exports.deletePet = async (req, res) => {
 			return res.status(404).send("There is no images");
 		}
 		await cloudinary.api.delete_resources(images);
+
+		const adoptedCountValue = await Pet.count({adopted: true }).exec();
+
+		await ShelterStats.findOneAndUpdate(
+			{ shelterId: updatePet.shelterId }, {adoptedCount: adoptedCountValue} 
+		);
 
 		// Update Shleter Stats
 		await ShelterStats.findOneAndUpdate(
