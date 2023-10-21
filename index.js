@@ -24,10 +24,6 @@ app.use(
   }),
 	);
 
-app.use('/', (req,res,next) => {
-	res.status(200).send("siemano!");
-	next();
-})
 	
 app.use(authRoutes)
 app.use(petRoutes)
@@ -40,5 +36,5 @@ mongoose
 	.connect(
 		`mongodb+srv://${process.env.NODE_DB_USER_NAME}:${process.env.NODE_DB_USER_PASSWORD}@cluster0.sxyaust.mongodb.net/Auth`
 	)
-	.then(app.listen(8080))
+	.then(app.listen(20523))
 	.catch((err) => console.log(err));

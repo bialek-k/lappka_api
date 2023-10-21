@@ -162,7 +162,7 @@ exports.deletePet = async (req, res) => {
 			return res.status(404).send("No pet");
 		}
 
-		const images = petToDelete.images.map((img) => img.id);
+		const images = petToDelete.images.map((img) => img.storageId);
 		if (!images) {
 			return res.status(404).send("There is no images");
 		}
@@ -171,7 +171,7 @@ exports.deletePet = async (req, res) => {
 		const adoptedCountValue = await Pet.count({adopted: true }).exec();
 
 		await ShelterStats.findOneAndUpdate(
-			{ shelterId: updatePet.shelterId }, {adoptedCount: adoptedCountValue} 
+			{ shelterId: petToDelete.shelterId }, {adoptedCount: adoptedCountValue} 
 		);
 
 		// Update Shleter Stats
