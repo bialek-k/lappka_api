@@ -23,6 +23,11 @@ app.use(
 		extended: true,
   }),
 	);
+
+app.use('/', (req,res,next) => {
+	res.status(200).send("siemano!");
+	next();
+})
 	
 app.use(authRoutes)
 app.use(petRoutes)
